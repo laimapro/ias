@@ -1,0 +1,23 @@
+Cadastro:
+Título do Projeto
+Empresa ou Instituição Parceira
+Coordenador do Projeto
+Gerente do Projeto
+Colaborador
+Participante
+
+
+Nome, 
+nome para exibição,
+ pronome de tratamento, 
+data de nascimento,
+ sexo,
+ gênero,
+ escolaridade,
+ cargo ou função(INPUT TEXTO),
+ ano de admissão (DATE),
+ pessoa com deficiência física, pessoa com deficiência visual, pessoa com deficiência auditiva,   (dropdown)
+
+
+
+com sistema de aprovação por codigo email 
