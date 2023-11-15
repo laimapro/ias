@@ -1,16 +1,16 @@
 <?php
 
-// Conectar ao banco de dados (substitua pelos seus próprios dados de conexão)
-    $servername = "localhost";
-    $username = "limafj_kawanias";
-    $password = ".gA9eDoC1j45";
-    $dbname = "limafj_ias";
+$host = "localhost";
+$usuario = "root";
+$senha = "";
+$banco = "ias";
 
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Verifica se a conexão foi bem sucedida
-    if ($conn->connect_error) {
-        die("Conexão ao banco de dados falhou");
-    }
+try {
+    $conexao = new PDO("mysql:host=$host;dbname=$banco;charset=utf8", $usuario, $senha);
+    // Configurar o PDO para lançar exceções em caso de erros
+    $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Erro na conexão com o banco de dados");
+}
 
 ?>
