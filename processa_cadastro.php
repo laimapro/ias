@@ -1,5 +1,6 @@
 <?php
 include('conexao.php');
+session_start(); // Inicia ou retoma a sessão
 
 // Recuperar os dados do formulário
 $nomeCompleto = $_POST['nomeCompleto'];
@@ -14,12 +15,13 @@ $cargoFuncao = $_POST['cargoFuncao'];
 $anoAdmissao = $_POST['anoAdmissao'];
 $condicaoDeficiencia = $_POST['condicaoDeficiencia'];
 $email = $_POST['email'];
-$senha = password_hash($_POST['senha'], PASSWORD_BCRYPT); // Criptografar a senha
+$idEmpresa = $_POST['idEmpresa'];
+$senha = password_hash($_POST['senha'], PASSWORD_BCRYPT);
 
 try {
     // Preparar a consulta SQL usando parâmetros nomeados
-    $sql = "INSERT INTO usuarios (nomeCompleto, nomeExibicao, fkPronomeTratamento, fkPronomeReferencia, dataNascimento, fkSexo, fkGenero, fkEscolaridade, cargoFuncao, anoAdmissao, fkDeficiencia, email, senha, datacadastrado) 
-            VALUES (:nomeCompleto, :nomeExibicao, :pronomeTratamento, :pronomesReferencia, :dataNascimento, :sexo, :genero, :escolaridade, :cargoFuncao, :anoAdmissao, :condicaoDeficiencia, :email, :senha, NOW())";
+    $sql = "INSERT INTO usuarios (nomeCompleto, nomeExibicao, fkPronomeTratamento, fkPronomeReferencia, dataNascimento, fkSexo, fkGenero, fkEscolaridade, cargoFuncao, anoAdmissao, fkDeficiencia, email, senha, idEmpresa, datacadastrado) 
+            VALUES (:nomeCompleto, :nomeExibicao, :pronomeTratamento, :pronomesReferencia, :dataNascimento, :sexo, :genero, :escolaridade, :cargoFuncao, :anoAdmissao, :condicaoDeficiencia, :email, :senha, :idEmpresa, NOW())";
     
     $stmt = $conexao->prepare($sql);
 
@@ -37,10 +39,11 @@ try {
     $stmt->bindParam(':condicaoDeficiencia', $condicaoDeficiencia);
     $stmt->bindParam(':email', $email);
     $stmt->bindParam(':senha', $senha);
+    $stmt->bindParam(':idEmpresa', $idEmpresa);
 
     $stmt->execute();
 
-    echo "Cadastro realizado com sucesso!";
+    header("Location: home.php");
 } catch (PDOException $e) {
     die("Erro na execução da consulta: " . $e->getMessage());
 } finally {

@@ -27,6 +27,20 @@ INSERT INTO `deficiencia` (`id`, `deficiencia`) VALUES
 (9, 'Eu me identifico como uma pessoa com deficiência física'),
 (10, 'Eu me identifico como uma pessoa sem deficiência');
 
+CREATE TABLE `empresa` (
+  `idEmpresa` int(11) NOT NULL,
+  `nomeProjetoConvenio` varchar(110) NOT NULL,
+  `nomeEmpresa` varchar(110) NOT NULL,
+  `cnpj` varchar(110) NOT NULL,
+  `codigoProjetoConvenio` varchar(110) NOT NULL,
+  `nomeGerente` varchar(110) NOT NULL,
+  `nomeCoordenador` varchar(110) NOT NULL,
+  `email` varchar(110) NOT NULL,
+  `senha` varchar(110) NOT NULL,
+  `dataCadastro` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+
 
 CREATE TABLE `escolaridade` (
   `idEscolaridade` int(11) NOT NULL,

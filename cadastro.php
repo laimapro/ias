@@ -8,6 +8,7 @@
 <body>
     <h2>Cadastro</h2>
     <form action="processa_cadastro.php" method="post" onsubmit="return validarFormulario();">
+        <input type="hidden" id="idEmpresa" name="idEmpresa" value="<?php echo isset($_GET['chave']) ? htmlspecialchars($_GET['chave']) : ''; ?>">
         <label for="nomeCompleto">Nome Completo:</label>
         <input type="text" id="nomeCompleto" name="nomeCompleto" required><br>
 
@@ -28,6 +29,7 @@
             <option value="10">Encarregado</option>
             <option value="11">Diretor</option>
             <option value="12">Diretora</option>
+            <option value="14">Coordenador</option>
             <option value="13">Presidente</option>
         </select><br>
 
@@ -92,12 +94,16 @@
         <option value="1">Prefiro não informar</option>
         <option value="2">Eu me identifico como uma pessoa com deficiência visual</option>
         <option value="3">Eu me identifico como uma pessoa com baixa visão</option>
-        <option value="4">Eu me identifico como cego</option>
+        <option value="4">Eu me identifico como uma pessoa cega</option>
         <option value="5">Eu me identifico como uma pessoa com deficiência auditiva</option>
         <option value="6">Eu me identifico como surdo</option>
+        <option value="6">Eu me identifico como uma pessoa surda</option>
         <option value="7">Eu me identifico como uma pessoa com deficiência intelectual</option>
+        <option value="0">Eu me identifico como uma pessoa Down</option>
+        <option value="7">Eu me identifico como uma pessoa Autista</option>
         <option value="8">Eu me identifico como uma pessoa com deficiência mental</option>
         <option value="9">Eu me identifico como uma pessoa com deficiência física</option>
+        <option value="11">Eu me identifico como uma pessoa cadeirante</option>
         <option value="10">Eu me identifico como uma pessoa sem deficiência</option>
         </select><br>
 
@@ -123,9 +129,6 @@
     }
 
     function enviarCodigoEmail(email, codigo) {
-        // Aqui você precisará fazer uma solicitação assíncrona para o servidor PHP
-        // para enviar o e-mail. Pode usar AJAX para isso.
-        // Exemplo com jQuery:
         $.ajax({
             type: "POST",
             url: "enviar_codigo.php", // Substitua pelo caminho real do seu arquivo PHP

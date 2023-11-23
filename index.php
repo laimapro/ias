@@ -1,95 +1,21 @@
-<?php
-include("includes/cores.html");
-?>
+<?php include_once('includes/head.php') ?>
+<div class="container px-4 py-5">
+    <div class="p-5 rounded-3 bg-white border shadow-lg text-center">
 
-
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instância de Aprimoramento Social</title>
-    <style>
-        /* Estilos básicos para o dropdown */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-        .dropdown-content a:hover {
-            background-color: #f1f1f1;
-        }
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-    </style>
-</head>
-<body>
-    <h1>Bem-vindo ao Instância de Aprimoramento Social!</h1>
-
-    <p>Escolha uma opção abaixo para começar.</p>
-
-    <div class="dropdown">
-        <button>Selecione um Tema de Contraste</button>
-        <div class="dropdown-content">
-            <a href="#" data-theme="protanopia" class="protanopia">Protanopia</a>
-            <a href="#" data-theme="deuteranopia" class="deuteranopia">Deuteranopia</a>
-            <a href="#" data-theme="tritanopia" class="tritanopia">Tritanopia</a>
-            <a href="#" data-theme="achromatopsia" class="achromatopsia">Acromatopsia</a>
-            <a href="#" data-theme="protanomaly" class="protanomaly">Protanomalia</a>
-            <a href="#" data-theme="deuteranomaly" class="deuteranomaly">Deuteranomalia</a>
-            <a href="#" data-theme="tritanomaly" class="tritanomaly">Tritanomalia</a>
+        <div class=" py-3 text-start col-lg-8 mx-auto my-4 my-4 text-body-secondary">
+            <p>👋 É muito bom ter você por aqui 🙂.</p>
         </div>
+        <nav class="mt-5 flex-wrap justify-content-center d-inline-flex gap-2 mb-5">
+            <h2 class="visually-hidden-focusable">Menu</h2>
+            <ul class="d-flex align-items-center flex-wrap flex-md-row flex-column mb-0 list-unstyled">
+                <li class="px-3"><a class="btn px-4 rounded-pill btn-link" href="sobre.php" title="Saiba mais sobre este programa" accesskey="1">Sobre Este Programa</a></li>
+                <li class="px-3"><a class="btn px-4 rounded-pill btn-link" href="#" title="Conheça mais sobre nossa equipe" accesskey="2">Quem Somos</a></li>
+                <li class="px-3"><a class="btn px-4 rounded-pill btn-primary" href="chave.php" title="Faça o cadastro do participante no IAS" accesskey="3">Cadastrar participante</a></li>
+                <li class="px-3"><a class="btn px-4 rounded-pill btn-primary" href="cadastro-empresa.php" title="Faça o cadastro da empresa" accesskey="4">Cadastrar Empresa</a></li>
+                <li class="px-3"><a class="btn px-4 rounded-pill btn-primary" href="login.php" title="Faça o login no IAS" accesskey="5">Entrar no IAS</a></li>
+            </ul>
+        </nav>
     </div>
+</div>
 
-    <button onclick="window.location.href='criainstancia.php'" aria-label="Criar uma Instância de Aprimoramento Social" role="button" accesskey="c" title="Clique para criar uma instância de aprimoramento social">Criar uma Instância de Aprimoramento Social</button>
-    <button onclick="window.location.href='criaviaupload.php'" aria-label="Criar Documento via upload" role="button" accesskey="u" title="Clique para fazer upload de um documento">Criar Documento via Upload</button>
-    <button onclick="window.location.href='editarinstancia.php'" aria-label="Clique para editar uma instância de aprimoramento social" role="button" accesskey="d" title="Clique para editar uma instância de aprimoramento social">Editar Instância</button>
-    <button onclick="askForNameAndRedirect();" aria-label="Responder uma Instância de Aprimoramento Social" role="button" accesskey="r" title="Clique para responder a uma instância de aprimoramento social">Responder uma Instância de Aprimoramento Social</button>
-    <script>
-
-        function askForNameAndRedirect() {
-            var name = prompt("Por favor, digite o seu nome:");
-            
-            if (name) {
-               // localStorage.setItem('nomeUsuario', name);
-                window.location.href = 'responderinstancia.php?name=' + encodeURIComponent(name);
-            }
-        }
-    
-        // Função para atualizar o estilo da página
-        function updateTheme(theme) {
-            document.body.className = theme;
-            localStorage.setItem('selectedTheme', theme);
-        }
-
-        var links = document.querySelectorAll('.dropdown-content a');
-        links.forEach(function(link) {
-            link.addEventListener('mouseover', function() {
-                var theme = this.getAttribute('data-theme');
-                updateTheme(theme);
-            });
-        });
-
-        var temasalvo = localStorage.getItem('selectedTheme');
-        if (temasalvo) {
-            updateTheme(temasalvo);
-        }
-    </script>
-    <script src="includes/cores.js"></script>
-</body>
-</html>
+<?php include_once('includes/footer.php') ?>

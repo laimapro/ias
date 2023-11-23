@@ -1,43 +1,50 @@
 <?php
 include('conexao.php');
+session_start(); // Inicia ou retoma a sessão
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
 
     try {
-        // Consulta SQL para obter o hash da senha correspondente ao email fornecido
-        $consulta = "SELECT idUsuario, senha FROM usuarios WHERE email = :email";
-        $stmt = $conexao->prepare($consulta);
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
+        $consultaUsuarios = "SELECT idUsuario, senha FROM usuarios WHERE email = :email";
+        $stmtUsuarios = $conexao->prepare($consultaUsuarios);
+        $stmtUsuarios->bindParam(':email', $email);
+        $stmtUsuarios->execute();
 
-        // Verifica se o email existe no banco de dados
-        if ($stmt->rowCount() > 0) {
-            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($stmtUsuarios->rowCount() > 0) {
+            $resultadoUsuarios = $stmtUsuarios->fetch(PDO::FETCH_ASSOC);
 
-            // Verifica se a senha fornecida corresponde ao hash armazenado no banco de dados
-            if (password_verify($senha, $resultado['senha'])) {
-                echo "Login bem-sucedido!";
-
-                // Aqui você pode redirecionar o usuário para a página de perfil, por exemplo
-                // header("Location: perfil.php?id=" . $resultado['id']);
-                // exit();
+            if (password_verify($senha, $resultadoUsuarios['senha'])) {
+                $_SESSION['idUsuario'] = $resultadoUsuarios['idUsuario'];
+                header("Location: home.php");
             } else {
-                // Mensagem genérica em caso de senha incorreta
                 echo "Credenciais inválidas. Tente novamente.";
             }
         } else {
-            // Mensagem genérica em caso de email não encontrado
-            echo "Credenciais inválidas. Tente novamente.";
+            $consultaEmpresa = "SELECT idEmpresa, senha FROM empresa WHERE email = :email";
+            $stmtEmpresa = $conexao->prepare($consultaEmpresa);
+            $stmtEmpresa->bindParam(':email', $email);
+            $stmtEmpresa->execute();
+
+            if ($stmtEmpresa->rowCount() > 0) {
+                $resultadoEmpresa = $stmtEmpresa->fetch(PDO::FETCH_ASSOC);
+
+                if (password_verify($senha, $resultadoEmpresa['senha'])) {
+                    $_SESSION['idEmpresa'] = $resultadoEmpresa['idEmpresa'];
+                    header("Location: admin/acesso-empresa.php");
+                } else {
+                    echo "Credenciais inválidas. Tente novamente.";
+                }
+            } else {
+                echo "Credenciais inválidas. Tente novamente.";
+            }
         }
     } catch (PDOException $e) {
-        // Mensagem genérica em caso de erro na consulta
-        echo "Credenciais inválidas. Tente novamente.";
+        echo "Erro na autenticação. Tente novamente.";
     }
 }
 
-// Se a requisição não foi um POST ou se algo deu errado, o usuário pode visualizar o formulário de login
 ?>
 
 <!DOCTYPE html>
