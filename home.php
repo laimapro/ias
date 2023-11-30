@@ -1,7 +1,6 @@
 <?php
 include("includes/cores.html");
-?>
-<?php
+
 session_start(); 
 
 if (!isset($_SESSION['idUsuario'])) {
@@ -9,7 +8,7 @@ if (!isset($_SESSION['idUsuario'])) {
     exit();
 }
 
-
+    
 ?>
 
 <!DOCTYPE html>
@@ -68,17 +67,9 @@ if (!isset($_SESSION['idUsuario'])) {
     <button onclick="window.location.href='criainstancia.php'" aria-label="Criar uma Instância de Aprimoramento Social" role="button" accesskey="c" title="Clique para criar uma instância de aprimoramento social">Criar uma Instância de Aprimoramento Social</button>
     <button onclick="window.location.href='criaviaupload.php'" aria-label="Criar Documento via upload" role="button" accesskey="u" title="Clique para fazer upload de um documento">Criar Documento via Upload</button>
     <button onclick="window.location.href='editarinstancia.php'" aria-label="Clique para editar uma instância de aprimoramento social" role="button" accesskey="d" title="Clique para editar uma instância de aprimoramento social">Editar Instância</button>
-    <button onclick="askForNameAndRedirect();" aria-label="Responder uma Instância de Aprimoramento Social" role="button" accesskey="r" title="Clique para responder a uma instância de aprimoramento social">Responder uma Instância de Aprimoramento Social</button>
+    <button onclick="window.location.href='responderinstancia.php'" aria-label="Responder uma Instância de Aprimoramento Social" role="button" accesskey="r" title="Clique para responder a uma instância de aprimoramento social">Responder uma Instância de Aprimoramento Social</button>
     <script>
 
-        function askForNameAndRedirect() {
-            var name = prompt("Por favor, digite o seu nome:");
-            
-            if (name) {
-               // localStorage.setItem('nomeUsuario', name);
-                window.location.href = 'responderinstancia.php?name=' + encodeURIComponent(name);
-            }
-        }
     
         // Função para atualizar o estilo da página
         function updateTheme(theme) {

@@ -3,6 +3,31 @@
 require 'vendor/autoload.php';  
 require 'conexao.php'; 
 
+include("includes/cores.html");
+
+session_start(); 
+
+if (!isset($_SESSION['idUsuario'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$idUsuario = $_SESSION['idUsuario'];
+
+$sqlUsuario = "SELECT idEmpresa FROM usuarios WHERE idUsuario = :idUsuario";
+$stmtUsuario = $conexao->prepare($sqlUsuario);
+$stmtUsuario->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+$stmtUsuario->execute();
+
+if ($stmtUsuario->rowCount() > 0) {
+    $rowUsuario = $stmtUsuario->fetch(PDO::FETCH_ASSOC);
+
+    
+    $idEmpresa = $rowUsuario['idEmpresa'];
+
+} else {
+    echo 'User information not found.';
+}
 use PhpOffice\PhpWord\IOFactory;
 
 
@@ -90,12 +115,13 @@ foreach ($textoArray as $line) {
             $arquivoJSON = 'instancias/' . $cleanedTitle . '.json';
 
 
-            $sql = "INSERT INTO instancias (nomeArquivo, arquivo, dataCriado) VALUES ('$cleanedTitle', '$arquivoJSON', NOW())";
-            if ($conn->query($sql) === TRUE) {
-               
+            $sql = "INSERT INTO instancias (nomeArquivo, arquivo, idUsuario, idEmpresa, dataCriado) VALUES ('$cleanedTitle', '$arquivoJSON', '$idUsuario', '$idEmpresa', NOW())";
+            if ($conexao->query($sql) === TRUE) {
+                // Consulta executada com sucesso
             } else {
-                echo "Erro ao salvar no banco de dados: " . $conn->error;
+              
             }
+            
         
 
 

@@ -1,6 +1,36 @@
 
 <?php
 include("includes/cores.html");
+include('conexao.php');
+
+session_start(); 
+
+
+if (!isset($_SESSION['idUsuario'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$idUsuario = $_SESSION['idUsuario'];
+
+echo 'idUsuario: ' . $idUsuario;  
+
+try {
+    $stmt = $conexao->prepare("SELECT idEmpresa FROM usuarios WHERE idUsuario = :idUsuario");
+    $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($result) {
+        $idEmpresa = $result['idEmpresa'];
+        echo 'idEmpresa: ' . $idEmpresa; 
+    } else {
+        echo 'Nenhum registro correspondente encontrado para idUsuario: ' . $idUsuario;
+    }
+} catch (PDOException $e) {
+    echo "Erro: " . $e->getMessage();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -24,6 +54,21 @@ include("includes/cores.html");
 
 <?php
 $pasta_instancias = 'instancias/';
+$arquivosPermitidos = array();
+
+// Consulta ao banco de dados para obter os caminhos completos dos arquivos que correspondem ao idEmpresa do usuário
+try {
+    $stmt = $conexao->prepare("SELECT arquivo FROM instancias WHERE idEmpresa = :idEmpresa");
+    $stmt->bindParam(':idEmpresa', $idEmpresa, PDO::PARAM_INT);
+    $stmt->execute();
+    $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($resultados as $linha) {
+        $arquivosPermitidos[] = basename($linha['arquivo']);
+    }
+} catch (PDOException $e) {
+    echo "Erro ao consultar banco de dados: " . $e->getMessage();
+}
 
 if (is_dir($pasta_instancias)) {
     $arquivos = scandir($pasta_instancias);
@@ -33,7 +78,7 @@ if (is_dir($pasta_instancias)) {
     echo '<select name="arquivo" id="arquivo">';
     echo '<option value="" selected>Selecione uma instância</option>';
     foreach ($arquivos as $arquivo) {
-        if (pathinfo($arquivo, PATHINFO_EXTENSION) === 'json') {
+        if (in_array($arquivo, $arquivosPermitidos)) {
             echo '<option value="' . $arquivo . '">' . $arquivo . '</option>';
         }
     }
@@ -142,8 +187,7 @@ function displayComment(questionIndex, answerIndex, checkbox) {
 function saveRating() {
     var rating = document.getElementById('rating').value;
     console.log('Avaliação salva: ' + rating);
-    // Aqui você salvaria a avaliação no servidor.
-    novaInstancia();  // Chame a função para mostrar o botão "Responder Nova Instância"
+    novaInstancia(); 
 }
 
 
@@ -152,7 +196,7 @@ function refreshPage() {
     var checkboxTexts = document.getElementsByClassName('checkboxText');
 
     for (var i = 0; i < checkboxes.length; i++) {
-        checkboxes[i].checked = false;  // Desmarca o checkbox
+        checkboxes[i].checked = false;  
         checkboxes[i].parentNode.parentNode.classList.remove('hidden');
         checkboxTexts[i].classList.remove('hidden');
     }
@@ -195,7 +239,6 @@ function enviadados() {
     var instanceInfo = getSelectedInstanceInfo();
 
     if (instanceInfo) {
-        // Crie um objeto JSON com as informações coletadas
         var responseInfo = {
             title: instanceInfo.title,
             situation: instanceInfo.situation,
@@ -204,10 +247,8 @@ function enviadados() {
             rating: instanceInfo.rating
         };
 
-        // Converta o objeto JSON em uma string JSON
         var jsonString = JSON.stringify(responseInfo);
 
-        // Use AJAX para enviar os dados JSON para o servidor
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {

@@ -7,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $senha = $_POST['senha'];
 
     try {
+        // Check in usuarios table
         $consultaUsuarios = "SELECT idUsuario, senha FROM usuarios WHERE email = :email";
         $stmtUsuarios = $conexao->prepare($consultaUsuarios);
         $stmtUsuarios->bindParam(':email', $email);
@@ -22,29 +23,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo "Credenciais inválidas. Tente novamente.";
             }
         } else {
-            $consultaEmpresa = "SELECT idEmpresa, senha FROM empresa WHERE email = :email";
-            $stmtEmpresa = $conexao->prepare($consultaEmpresa);
-            $stmtEmpresa->bindParam(':email', $email);
-            $stmtEmpresa->execute();
+            // Check in coordenador table
+            $consultaCoordenador = "SELECT idCoordenador, emailCoordenador, senhaCoordenador FROM coordenador WHERE emailCoordenador = :email";
+            $stmtCoordenador = $conexao->prepare($consultaCoordenador);
+            $stmtCoordenador->bindParam(':email', $email);
+            $stmtCoordenador->execute();
 
-            if ($stmtEmpresa->rowCount() > 0) {
-                $resultadoEmpresa = $stmtEmpresa->fetch(PDO::FETCH_ASSOC);
+            if ($stmtCoordenador->rowCount() > 0) {
+                $resultadoCoordenador = $stmtCoordenador->fetch(PDO::FETCH_ASSOC);
 
-                if (password_verify($senha, $resultadoEmpresa['senha'])) {
-                    $_SESSION['idEmpresa'] = $resultadoEmpresa['idEmpresa'];
-                    header("Location: admin/acesso-empresa.php");
+                if (password_verify($senha, $resultadoCoordenador['senhaCoordenador'])) {
+                    $_SESSION['idCoordenador'] = $resultadoCoordenador['idCoordenador'];
+                    header("Location: admin/acesso-coordenador.php");
                 } else {
                     echo "Credenciais inválidas. Tente novamente.";
                 }
             } else {
-                echo "Credenciais inválidas. Tente novamente.";
+                // Check in gerente table
+                $consultaGerente = "SELECT idGerente, emailGerente, senhaGerente FROM gerente WHERE emailGerente = :email";
+                $stmtGerente = $conexao->prepare($consultaGerente);
+                $stmtGerente->bindParam(':email', $email);
+                $stmtGerente->execute();
+
+                if ($stmtGerente->rowCount() > 0) {
+                    $resultadoGerente = $stmtGerente->fetch(PDO::FETCH_ASSOC);
+
+                    if (password_verify($senha, $resultadoGerente['senhaGerente'])) {
+                        $_SESSION['idGerente'] = $resultadoGerente['idGerente'];
+                        header("Location: admin/acesso-gerente.php");
+                    } else {
+                        echo "Credenciais inválidas. Tente novamente.";
+                    }
+                } else {
+                    echo "Credenciais inválidas. Tente novamente.";
+                }
             }
         }
     } catch (PDOException $e) {
         echo "Erro na autenticação. Tente novamente.";
     }
 }
-
 ?>
 
 <!DOCTYPE html>
